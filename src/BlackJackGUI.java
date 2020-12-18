@@ -54,6 +54,7 @@ public class BlackJackGUI {
                     // ai move
                     int choice = blackJack.generateAIDecision();
                     if (choice == 1) {
+                        stayCount = 0;
                         blackJack.dealCardToPlayer(blackJack.getComputer());
                         setCardsText();
                     } else {

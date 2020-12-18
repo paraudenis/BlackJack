@@ -99,6 +99,7 @@ public class BlackJack {
         Integer numberOfGoodCardsForPlayer = 0;
         Integer numberOfBadCardsForPlayer = 0;
         Integer numberOfDrawableCardsForPlayer = 0;
+        Integer maxPossibleCardForPlayer = 0;
 
         /* Set arraylist containing cards that are visible to AI */
         ArrayList<Integer> visibleCards = getCardsVisibleToAI();
@@ -115,6 +116,9 @@ public class BlackJack {
                     numberOfBadCards++;
                     numberOfDrawableCards++;
                 }
+                if (card > maxPossibleCardForPlayer) {
+                    maxPossibleCardForPlayer = card;
+                }
                 if (playerCardSum + card <= goToValue) {
                     numberOfGoodCardsForPlayer++;
                     numberOfDrawableCardsForPlayer++;
@@ -126,10 +130,17 @@ public class BlackJack {
         }
         probabilityThatPlayerIsBust = numberOfBadCardsForPlayer.floatValue()/numberOfDrawableCardsForPlayer.floatValue();
         probabilityToDrawGoodCard = numberOfGoodCards.floatValue()/numberOfDrawableCards.floatValue();
-        if (probabilityThatPlayerIsBust >= probabilityToDrawGoodCard) {
+        if (aiCardSum > playerCardSum + maxPossibleCardForPlayer) {
+            return 0;
+        } else if (probabilityThatPlayerIsBust >= probabilityToDrawGoodCard) {
             return 0;
         } else {
-            return 1;
+            Float choice = rand.nextFloat();
+            if(choice<probabilityToDrawGoodCard) {
+                return 1;
+            } else {
+                return 0;
+            }
         }
     }
 
@@ -165,9 +176,9 @@ public class BlackJack {
             return 2; /* computer wins */
         } else if (playerTotal == computerTotal) {
             return 0; /* draw */
-        } else if (playerTotal == 4) {
+        } else if (playerTotal == 4 && player.getHiddenCard() == 4) {
             return 1; /* player wins */
-        } else if (computerTotal == 4) {
+        } else if (computerTotal == 4 && computer.getHiddenCard() == 4) {
             return 2; /* computer wins */
         } else if (playerTotal > computerTotal)  {
             return 1; /* player wins */
